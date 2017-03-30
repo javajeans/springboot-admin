@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liangjiange.cloud.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.liangjiange.cloud.model.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="alias_name" jdbcType="VARCHAR" property="aliasName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="cellphone" jdbcType="VARCHAR" property="cellphone" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+    <result column="is_locked" jdbcType="BIT" property="locked" />
+    <result column="token" jdbcType="BIT" property="token" />
+  </resultMap>
+
+  <select id="getUsersByFilters" resultMap="BaseResultMap" parameterType="map">
+    SELECT * from USER
+    <where>
+      <if test="username !=null and username !=''">
+        and username LIKE concat(#{username},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="getUserByUsername" resultMap="BaseResultMap" parameterType="map">
+    SELECT * from USER WHERE username = #{username}
+  </select>
+
+</mapper>

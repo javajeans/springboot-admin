@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liangjiange.cloud.mapper.MenuMapper">
+
+	<resultMap id="BaseResultMap" type="com.liangjiange.cloud.model.Menu">
+		<!--
+          WARNING - @mbg.generated
+        -->
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="iconfont" jdbcType="VARCHAR" property="iconfont" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+		<result column="display_order" jdbcType="INTEGER" property="displayOrder" />
+		<result column="parent_id" jdbcType="BIGINT" property="parentId" />
+		<result column="has_child_menu" jdbcType="BIT" property="hasChildMenu" />
+		<result column="status" jdbcType="BIT" property="status" />
+	</resultMap>
+
+  <select id="getMenusByUserAndParentId" resultMap="BaseResultMap" parameterType="map">
+	    select 
+		  menu.id,
+		  menu.gmt_create,
+		  menu.gmt_modified,
+		  menu.name,
+		  menu.description,
+		  menu.iconfont,
+		  menu.url,
+		  menu.display_order,
+		  menu.parent_id,
+		  menu.has_child_menu,
+		  menu.status
+		FROM
+		  user,
+		  user_has_role,
+		  role,
+		  role_has_menu,
+		  menu
+		WHERE 
+			  user.is_locked = 1
+			  and user.id = #{userId}
+			  and user.id = user_has_role.user_id
+			  and user_has_role.role_id = role.id
+			  and role.status = 1
+			  and role.id = role_has_menu.role_id
+			  and role_has_menu.menu_id = menu.id
+			  and menu.status = 1
+			  and menu.parent_id = #{parentId}
+			  order by menu.id asc
+  </select>
+  
+  <select id="getFirstLevelMenusByUser" resultMap="BaseResultMap" parameterType="map">
+	    select 
+		  menu.id,
+		  menu.name,
+		  menu.gmt_create,
+		  menu.gmt_modified,
+		  menu.description,
+		  menu.iconfont,
+		  menu.url,
+		  menu.display_order,
+		  menu.parent_id,
+		  menu.has_child_menu,
+		  menu.status
+		FROM
+		  user,
+		  user_has_role,
+		  role,
+		  role_has_menu,
+		  menu
+		WHERE 
+			  user.is_locked = 1
+			  and user.id = #{userId}
+			  and user.id = user_has_role.user_id
+			  and user_has_role.role_id = role.id
+			  and role.status = 1
+			  and role.id = role_has_menu.role_id
+			  and role_has_menu.menu_id = menu.id
+			  and menu.status = 1
+			  and menu.parent_id = 0
+			  order by menu.id asc
+  </select>
+
+</mapper>
