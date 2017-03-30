@@ -1,0 +1,2 @@
+# springboot-admin
+SpringBoot整合Mybatis和Gentella实现的后台管理系统
