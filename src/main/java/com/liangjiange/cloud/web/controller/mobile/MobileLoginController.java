@@ -30,6 +30,11 @@ public class MobileLoginController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping("login")
+    public String login() {
+        return "mobile/login";
+    }
+
     @RequestMapping("jwt")
     @ResponseBody
     public String getJWT(HttpServletRequest request, @RequestParam String uname, @RequestParam String pword) {
